@@ -85,10 +85,8 @@ where
 )]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    #[arg(short, long)]
-    yes: bool,
-    #[arg(short, long)]
     /// Print help
+    #[arg(short, long)]
     help: bool,
     /// Print version
     #[arg(short = 'V', long)]
