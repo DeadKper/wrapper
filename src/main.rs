@@ -82,7 +82,7 @@ where
     trailing_var_arg = true,
     disable_help_flag = true,
     disable_version_flag = true,
-    disable_help_subcommand = true
+    disable_help_subcommand = true,
 )]
 #[command(author, version, about, long_about = None)]
 enum SubCmd {
@@ -92,7 +92,7 @@ enum SubCmd {
         #[arg(short, long)]
         help: bool,
         /// Packages to install
-        packages: Option<Vec<String>>,
+        packages: Option<Vec<String>>
     },
     /// Search for packages
     Search {
@@ -124,9 +124,9 @@ enum SubCmd {
 #[clap(
     allow_hyphen_values = true,
     trailing_var_arg = true,
-    // disable_help_flag = true,
+    disable_help_flag = true,
     disable_version_flag = true,
-    // disable_help_subcommand = true
+    disable_help_subcommand = true
 )]
 #[command(author, version, about, long_about = None)]
 struct Args {
@@ -134,8 +134,8 @@ struct Args {
     #[command(subcommand)]
     cmd: Option<SubCmd>,
     /// Print help
-    // #[arg(short, long)]
-    // help: bool,
+    #[arg(short, long)]
+    help: bool,
     /// Print version
     #[arg(short = 'V', long)]
     version: bool,
@@ -145,12 +145,10 @@ fn main() -> Result<()> {
     let args = Args::parse_known()?.matches;
     let mut cmd = Args::command();
     cmd.build();
-    let matches = cmd.clone().get_matches();
-    let _ = Args::from_arg_matches(&matches);
-    // if args.help {
-    //     cmd.print_help()?;
-    //     std::process::exit(0);
-    // }
+    if args.help {
+        cmd.print_help()?;
+        std::process::exit(0);
+    }
 
     if args.version {
         print!("{}", cmd.render_version());
