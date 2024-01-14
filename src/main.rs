@@ -103,7 +103,7 @@ fn help() {
 fn main() -> Result<()> {
     let args = Args::parse_known()?;
     if args.matches.help {
-        help()
+        help();
     }
 
     if args.matches.version {
@@ -115,7 +115,7 @@ fn main() -> Result<()> {
 
     // TODO: check for other commands
     if args.rest.len() == 0 {
-        help()
+        help();
     }
     println!("{:#?}", args);
     Ok(())
