@@ -1,7 +1,7 @@
 use anyhow::{anyhow, bail, Result};
 use clap::{
     error::{ContextKind, ContextValue, ErrorKind},
-    ArgMatches, CommandFactory, FromArgMatches, Parser,
+    ArgMatches, CommandFactory, FromArgMatches, Parser, Subcommand,
 };
 use std::env::args;
 
@@ -76,47 +76,126 @@ where
     }
 }
 
-#[derive(Parser, Debug, Clone)]
+#[derive(Subcommand, Debug, Clone)]
 #[clap(
     allow_hyphen_values = true,
     trailing_var_arg = true,
     disable_help_flag = true,
-    disable_version_flag = true
+    disable_version_flag = true,
+    disable_help_subcommand = true
+)]
+#[command(author, version, about, long_about = None)]
+enum SubCmd {
+    /// Install packages
+    Install {
+        /// Print help
+        #[arg(short, long)]
+        help: bool,
+        /// Packages to install
+        packages: Option<Vec<String>>,
+    },
+    /// Search for packages
+    Search {
+        /// Print help
+        #[arg(short, long)]
+        help: bool,
+    },
+    /// Updates packages
+    Update {
+        /// Print help
+        #[arg(short, long)]
+        help: bool,
+    },
+    /// Remove packages
+    Remove {
+        /// Print help
+        #[arg(short, long)]
+        help: bool,
+    },
+    /// List installed packages
+    List {
+        /// Print help
+        #[arg(short, long)]
+        help: bool,
+    },
+}
+
+#[derive(Parser, Debug, Clone)]
+#[clap(
+    allow_hyphen_values = true,
+    trailing_var_arg = true,
+    // disable_help_flag = true,
+    disable_version_flag = true,
+    // disable_help_subcommand = true
 )]
 #[command(author, version, about, long_about = None)]
 struct Args {
+    /// Install programs
+    #[command(subcommand)]
+    cmd: Option<SubCmd>,
     /// Print help
-    #[arg(short, long)]
-    help: bool,
+    // #[arg(short, long)]
+    // help: bool,
     /// Print version
     #[arg(short = 'V', long)]
     version: bool,
 }
 
-fn help() {
+fn main() -> Result<()> {
+    let args = Args::parse_known()?.matches;
     let mut cmd = Args::command();
     cmd.build();
-    let _ = cmd.print_help();
-    std::process::exit(0);
-}
+    let matches = cmd.clone().get_matches();
+    let _ = Args::from_arg_matches(&matches);
+    // if args.help {
+    //     cmd.print_help()?;
+    //     std::process::exit(0);
+    // }
 
-fn main() -> Result<()> {
-    let args = Args::parse_known()?;
-    if args.matches.help {
-        help();
-    }
-
-    if args.matches.version {
-        let mut cmd = Args::command();
-        cmd.build();
+    if args.version {
         print!("{}", cmd.render_version());
         std::process::exit(0);
     }
 
-    // TODO: check for other commands
-    if args.rest.len() == 0 {
-        help();
+    match args.cmd {
+        Some(SubCmd::Install { help, packages }) => {
+            if help || packages.is_none() {
+                cmd.find_subcommand_mut("install").unwrap().print_help()?;
+                std::process::exit(0);
+            }
+        }
+        Some(SubCmd::Search { help }) => {
+            if help {
+                cmd.find_subcommand_mut("search").unwrap().print_help()?;
+                std::process::exit(0);
+            }
+        }
+        Some(SubCmd::Update { help }) => {
+            if help {
+                cmd.find_subcommand_mut("update").unwrap().print_help()?;
+                std::process::exit(0);
+            }
+        }
+        Some(SubCmd::Remove { help }) => {
+            if help {
+                cmd.find_subcommand_mut("remove").unwrap().print_help()?;
+                std::process::exit(0);
+            }
+        }
+        Some(SubCmd::List { help }) => {
+            if help {
+                cmd.find_subcommand_mut("list").unwrap().print_help()?;
+                std::process::exit(0);
+            }
+        }
+        None => {
+            // if args.rest.len() == 0 {
+            //     cmd.print_help()?;
+            //     std::process::exit(0);
+            // }
+        }
     }
-    println!("{:#?}", args);
+
+    // println!("{:#?}", args);
     Ok(())
 }
