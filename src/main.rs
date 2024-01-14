@@ -106,6 +106,13 @@ fn main() -> Result<()> {
         help()
     }
 
+    if args.matches.version {
+        let mut cmd = Args::command();
+        cmd.build();
+        print!("{}", cmd.render_version());
+        std::process::exit(0);
+    }
+
     // TODO: check for other commands
     if args.rest.len() == 0 {
         help()
