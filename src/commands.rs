@@ -2,7 +2,7 @@ use clap::Subcommand;
 
 #[derive(Subcommand, Debug, Clone)]
 #[command(author, version, about, long_about = None)]
-pub enum Commands {
+pub enum Command {
     /// Install packages
     Install {
         /// Packages to install
