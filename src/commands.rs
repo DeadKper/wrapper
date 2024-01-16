@@ -1,19 +1,33 @@
 use clap::Subcommand;
 
 #[derive(Subcommand, Debug, Clone)]
-#[command(author, version, about, long_about = None)]
 pub enum Command {
     /// Install packages
     Install {
+        /// Interactive search + install mode
+        #[arg(short, long)]
+        interactive: bool,
         /// Packages to install
         packages: Vec<String>,
     },
-    /// Search for packages
-    Search {},
+    /// Search for package matching all specified strings
+    Search {
+        /// Package to search
+        package: Vec<String>,
+    },
     /// Updates packages
-    Update {},
+    Update {
+        /// Packages to update
+        packages: Vec<String>,
+    },
     /// Remove packages
-    Remove {},
+    Remove {
+        /// Remove unneeded packages
+        #[arg(short, long)]
+        unneeded: bool,
+        /// Packages to remove
+        packages: Vec<String>,
+    },
     /// List installed packages
-    List {},
+    List,
 }
