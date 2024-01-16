@@ -1,3 +1,3 @@
 #!/bin/sh
-sudo dnf4 check-update --refresh &
-dnf4 check-update --refresh
+sudo dnf4 check-update &
+dnf4 check-update

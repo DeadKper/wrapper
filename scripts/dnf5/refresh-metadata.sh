@@ -1,3 +1,3 @@
 #!/bin/sh
-sudo dnf5 check-update --refresh &
-dnf5 check-update --refresh
+sudo dnf5 check-update &
+dnf5 check-update
