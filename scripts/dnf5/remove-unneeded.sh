@@ -1,2 +1,2 @@
-#!/bin/bash
+#!/bin/sh
 sudo dnf5 autoremove -y
