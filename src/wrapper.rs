@@ -32,6 +32,7 @@ impl Wrapper {
                     }
                 }
 
+                // TODO: allow different package manager versions to be auto detected
                 if curr_managers.len() > 1 {
                     panic!(
                         "argument \"{flag}\" has more than 1 manager detected: {curr_managers:?}"
