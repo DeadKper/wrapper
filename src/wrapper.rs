@@ -16,7 +16,7 @@ pub struct Wrapper {
 impl Wrapper {
     pub fn parse_managers() -> Self {
         // TODO: detect managers
-        let detected_managers = vec!["dnf5", "flatpak", "nix-env"];
+        let detected_managers = vec!["nix-env", "flatpak", "dnf/dnf5", "dnf/dnf4"];
         let args = args().collect::<Vec<_>>();
 
         let mut remaining: Vec<String> = vec![];
@@ -27,20 +27,13 @@ impl Wrapper {
             if flag.starts_with("--") {
                 let flag_value = &flag[2..flag.len()];
                 for manager in &detected_managers {
-                    if manager.starts_with(flag_value) {
+                    if manager.starts_with(flag_value) || manager.contains(&format!("/{flag_value}")) {
                         curr_managers.push(manager.to_string());
                     }
                 }
-
-                // TODO: allow different package manager versions to be auto detected
-                if curr_managers.len() > 1 {
-                    panic!(
-                        "argument \"{flag}\" has more than 1 manager detected: {curr_managers:?}"
-                    )
-                }
             }
 
-            if curr_managers.len() == 1 {
+            if curr_managers.len() > 0 {
                 managers.append(&mut curr_managers);
             } else {
                 remaining.push(flag);
