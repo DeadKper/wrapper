@@ -1,2 +1,2 @@
 #!/bin/sh
-nix-env -f '<nixpkgs>' -e -- $@
+nix-env -f "<$(./get-channel.sh)>" -e -- $@
