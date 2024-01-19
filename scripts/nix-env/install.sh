@@ -1,2 +1,8 @@
 #!/bin/sh
-nix-env -f "<$(./get-channel.sh)>" -iA -- $@
+channel=$(./get-channel.sh $@)
+if test -z "$channel"
+then
+	nix-env -iA -- $@
+else
+	nix-env -f "<$channel>" -iA -- $@
+fi
