@@ -1,5 +1,5 @@
 #!/bin/sh
-channel=$(./get-channel.sh $@)
+channel=$($(dirname $(readlink -f $0))/get-channel.sh $@)
 if test -z "$channel"
 then
 	nix-env -uA -- $@
