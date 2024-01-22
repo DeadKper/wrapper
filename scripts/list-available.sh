@@ -1,6 +1,6 @@
 #!/bin/sh
 DIR=$@
-if [ -z "$DIR" ]
+if test -z "$DIR"
 then
 	DIR="$(dirname $(readlink -f $0))"
 fi
