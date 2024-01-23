@@ -6,7 +6,6 @@ use std::env::args;
 #[clap(subcommand_required = true)]
 #[command(author, version, about, long_about = None)]
 pub struct Wrapper {
-    /// Install programs
     #[command(subcommand)]
     pub command: Command,
     #[clap(skip)]

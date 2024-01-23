@@ -10,6 +10,18 @@ pub enum Command {
         /// Packages to install
         packages: Vec<String>,
     },
+    /// List installed packages
+    List,
+    /// Refresh metadata for valid package managers
+    Refresh,
+    /// Remove packages
+    Remove {
+        /// Remove unneeded packages
+        #[arg(short, long)]
+        unneeded: bool,
+        /// Packages to remove
+        packages: Vec<String>,
+    },
     /// Search for package matching all specified strings
     Search {
         /// Package to search
@@ -20,14 +32,4 @@ pub enum Command {
         /// Packages to update
         packages: Vec<String>,
     },
-    /// Remove packages
-    Remove {
-        /// Remove unneeded packages
-        #[arg(short, long)]
-        unneeded: bool,
-        /// Packages to remove
-        packages: Vec<String>,
-    },
-    /// List installed packages
-    List,
 }
